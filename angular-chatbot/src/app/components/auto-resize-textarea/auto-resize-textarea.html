@@ -1,0 +1,12 @@
+<textarea
+  #textarea
+  [value]="value"
+  [placeholder]="placeholder"
+  (input)="onInput($event)"
+  (keydown)="onKeyDown($event)"
+  [style.color]="textColor"
+  [style.border-color]="borderColor"
+  [style.margin-right]="marginRight"
+  class="w-full resize-none border rounded-md p-3 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+  rows="1">
+</textarea>

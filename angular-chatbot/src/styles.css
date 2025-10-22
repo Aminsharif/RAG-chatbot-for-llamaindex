@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: #f8f8f8;
+  background: #131318;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+body input,
+body textarea {
+  color: black;
+}
+
+a {
+  color: #2d7bd4;
+}
+
+a:hover {
+  border-bottom: 1px solid;
+}
+
+p {
+  margin: 8px 0;
+}
+
+code {
+  color: #ffa500;
+}
+
+li {
+  padding: 4px;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Highlight.js styles */
+.highlight {
+  background: #2d3748 !important;
+  padding: 5px;
+  border-radius: 5px;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  max-width: 100%;
+  display: block;
+  line-height: 1.2;
+}
+
+.highlight code {
+  color: #d6e2ef !important;
+  font-size: 12px;
+}

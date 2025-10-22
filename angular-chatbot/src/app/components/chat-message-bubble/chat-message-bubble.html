@@ -1,0 +1,11 @@
+<div class="w-full my-2">
+  <div [class.text-right]="message.role === 'user'" class="text-white">
+    <div [class.bg-gray-700]="message.role === 'assistant'" [class.bg-blue-700]="message.role === 'user'" class="inline-block rounded px-4 py-3 max-w-3xl">
+      <div [innerHTML]="message.content"></div>
+    </div>
+
+    <div *ngIf="message.sources && message.sources.length" class="grid grid-cols-2 gap-2 mt-2">
+      <app-source-bubble *ngFor="let s of message.sources" [source]="s" [highlighted]="false" [runId]="message.runId"></app-source-bubble>
+    </div>
+  </div>
+</div>

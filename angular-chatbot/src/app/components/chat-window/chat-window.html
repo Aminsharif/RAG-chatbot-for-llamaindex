@@ -1,0 +1,63 @@
+<div class="flex flex-col items-center p-8 rounded grow max-h-full">
+  <div class="flex flex-col items-center" [style.marginTop]="messages.length > 0 ? '' : '64px'">
+    <h1 class="text-white mb-1" [class.text-3xl]="messages.length === 0" [class.text-2xl]="messages.length > 0">Chat LangChain 🦜🔗</h1>
+    <h2 class="text-white" [class.text-md]="messages.length > 0" [class.text-xl]="messages.length === 0">
+      <span *ngIf="messages.length > 0">We appreciate feedback!</span>
+      <span *ngIf="messages.length === 0">
+        Ask me anything about LangChain's
+        <a href="https://python.langchain.com/" class="text-blue-200">Python documentation!</a>
+      </span>
+    </h2>
+    <div class="text-white flex flex-wrap items-center mt-4">
+      <div class="flex items-center mb-2">
+        <span class="shrink-0 mr-2">Powered by</span>
+        <select [(ngModel)]="llm" class="w-60 text-black rounded p-2">
+          <option value="qwen3">Qwen 3:8b</option>
+          <option value="llama_3">Llama 3</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col-reverse w-full mb-2 overflow-auto">
+    <ng-container *ngIf="messages.length > 0; else empty">
+      <ng-container *ngFor="let m of messages.slice().reverse(); let i = index">
+        <app-chat-message-bubble
+          [message]="m"
+          [aiEmoji]="'🦜'"
+          [isMostRecent]="i === 0"
+          [messageCompleted]="!isLoading"
+        />
+      </ng-container>
+    </ng-container>
+    <ng-template #empty>
+      <app-empty-state (onChoice)="sendInitialQuestion($event)" />
+    </ng-template>
+  </div>
+
+  <div class="w-full relative">
+    <app-auto-resize-textarea
+      [value]="input"
+      [maxRows]="5"
+      [marginRight]="'56px'"
+      placeholder="What does RunnablePassthrough.assign() do?"
+      [textColor]="'white'"
+      [borderColor]="'rgb(58, 58, 61)'"
+      (valueChange)="input = $event"
+      (keyDown)="($event.key === 'Enter' && !$event.shiftKey) ? (sendMessage(), $event.preventDefault()) : ($event.key === 'Enter' && $event.shiftKey ? (input = input + '\n', $event.preventDefault()) : null)"
+    ></app-auto-resize-textarea>
+    <button
+      class="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white rounded-full px-4 py-2"
+      (click)="sendMessage()">
+      <span *ngIf="isLoading">Loading...</span>
+      <span *ngIf="!isLoading">↑</span>
+    </button>
+  </div>
+
+  <footer *ngIf="messages.length === 0" class="flex justify-center absolute bottom-8">
+    <a href="https://github.com/langchain-ai/chat-langchain" target="_blank" class="text-white flex items-center">
+      <img src="/images/github-mark.svg" class="h-4 mr-1" />
+      <span>View Source</span>
+    </a>
+  </footer>
+</div>
