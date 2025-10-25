@@ -1,10 +1,25 @@
 <div class="w-full my-2">
   <div [class.text-right]="message.role === 'user'" class="text-white">
     <div [class.bg-gray-700]="message.role === 'assistant'" [class.bg-blue-700]="message.role === 'user'" class="inline-block rounded px-4 py-3 max-w-3xl">
-      <div [innerHTML]="message.content"></div>
+      <ng-container *ngIf="message.role === 'assistant' && message.sources && message.sources.length > 0; else simpleContent">
+        <ng-container *ngFor="let element of createAnswerElements(message.content, filterSources(message.sources).filtered, filterSources(message.sources).indexMap)">
+          <span *ngIf="element.type === 'content'" [innerHTML]="element.html"></span>
+          <app-inline-citation 
+            *ngIf="element.type === 'citation'"
+            [source]="element.source"
+            [sourceNumber]="element.sourceNumber"
+            [highlighted]="element.highlighted"
+            (mouseEnter)="onCitationMouseEnter(element.sourceNumber, filterSources(message.sources).filtered)"
+            (mouseLeave)="onCitationMouseLeave(filterSources(message.sources).filtered)">
+          </app-inline-citation>
+        </ng-container>
+      </ng-container>
+      <ng-template #simpleContent>
+        <div [innerHTML]="safeHtml(message.content)"></div>
+      </ng-template>
     </div>
 
-    <div *ngIf="message.sources && message.sources.length" class="grid grid-cols-2 gap-2 mt-2">
+    <div *ngIf="message.role === 'assistant' && message.sources && message.sources.length" class="grid grid-cols-2 gap-2 mt-2">
       <app-source-bubble *ngFor="let s of message.sources" [source]="s" [highlighted]="false" [runId]="message.runId"></app-source-bubble>
     </div>
   </div>

@@ -1,0 +1,69 @@
+<div class="llm-output-container" [class]="getThemeClass()">
+  <!-- Header with actions -->
+  <div class="output-header" *ngIf="showCopyButton || showWordCount">
+    <div class="stats" *ngIf="showWordCount">
+      <span class="stat-item">
+        <svg class="stat-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4zm1 0v8h10V4H3z"/>
+          <path d="M4 6h8v1H4V6zm0 2h8v1H4V8z"/>
+        </svg>
+        {{ wordCount }} words
+      </span>
+      <span class="stat-item">
+        <svg class="stat-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 7.5a.5.5 0 0 1 .5-.5h2V5.5a.5.5 0 0 1 1 0V7h1.5a.5.5 0 0 1 0 1H8v1.5a.5.5 0 0 1-1 0V8H5.5a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        {{ characterCount }} chars
+      </span>
+    </div>
+    
+    <div class="actions">
+      <button 
+        *ngIf="showCopyButton" 
+        class="copy-button"
+        [class.success]="copySuccess"
+        (click)="copyToClipboard()"
+        [disabled]="!markdownContent"
+        title="Copy to clipboard"
+      >
+        <svg *ngIf="!copySuccess" class="copy-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+          <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+        </svg>
+        <svg *ngIf="copySuccess" class="check-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+        </svg>
+        <span class="copy-text">{{ copySuccess ? 'Copied!' : 'Copy' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content area -->
+  <div 
+    class="output-content markdown-content" 
+    [style.max-height]="maxHeight"
+    [class.streaming]="isStreaming"
+  >
+    <div 
+      class="markdown-wrapper"
+      [innerHTML]="markdownContent | markdown"
+    ></div>
+    
+    <!-- Streaming indicator -->
+    <div class="streaming-indicator" *ngIf="isStreaming">
+      <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!markdownContent && !isStreaming">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    <p class="empty-text">No content to display</p>
+  </div>
+</div>

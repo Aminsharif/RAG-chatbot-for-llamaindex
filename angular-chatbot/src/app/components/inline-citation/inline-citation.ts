@@ -3,6 +3,7 @@ import { Source } from '../../models/message.model';
 
 @Component({
   selector: 'app-inline-citation',
+  standalone: true,
   imports: [],
   templateUrl: './inline-citation.html',
   styleUrl: './inline-citation.css'

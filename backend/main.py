@@ -35,8 +35,47 @@ class SendFeedbackBody(BaseModel):
     key: str = "user_score"
 
     score: Union[float, int, bool, None] = None
+    value: Optional[str] = None
     feedback_id: Optional[UUID] = None
     comment: Optional[str] = None
+    source_info: Optional[dict] = None
+
+@app.post("/feedback")
+async def create_feedback(body: SendFeedbackBody):
+    try:
+        fb = client.create_feedback(
+            run_id=body.run_id,
+            key=body.key,
+            score=body.score,
+            value=body.value,
+            comment=body.comment,
+            feedback_id=body.feedback_id,
+            source_info=body.source_info,
+        )
+        return {"result": "success", "code": 200, "id": str(fb.id)}
+    except Exception as e:
+        return {"result": f"error: {e}", "code": 500}
+
+class UpdateFeedbackBody(BaseModel):
+    feedback_id: UUID
+    score: Union[float, int, bool, None] = None
+    value: Optional[str] = None
+    comment: Optional[str] = None
+    source_info: Optional[dict] = None
+
+@app.patch("/feedback")
+async def update_feedback(body: UpdateFeedbackBody):
+    try:
+        fb = client.update_feedback(
+            body.feedback_id,
+            score=body.score,
+            value=body.value,
+            comment=body.comment,
+            source_info=body.source_info,
+        )
+        return {"result": "success", "code": 200, "id": str(fb.id)}
+    except Exception as e:
+        return {"result": f"error: {e}", "code": 500}
 
 @app.get("/")
 async def root():

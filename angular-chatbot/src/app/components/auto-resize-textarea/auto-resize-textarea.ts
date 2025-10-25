@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-auto-resize-textarea',
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './auto-resize-textarea.html',
   styleUrl: './auto-resize-textarea.css'
@@ -36,10 +37,16 @@ export class AutoResizeTextareaComponent implements AfterViewInit {
   }
 
   private adjustHeight() {
-    const textarea = this.textarea.nativeElement;
+    // Guard for SSR: window/getComputedStyle not available
+    if (typeof window === 'undefined' || typeof getComputedStyle === 'undefined') {
+      return;
+    }
+    const textarea = this.textarea?.nativeElement;
+    if (!textarea) return;
+
     textarea.style.height = 'auto';
-    
-    const lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+    const lineHeightStr = getComputedStyle(textarea).lineHeight;
+    const lineHeight = parseInt(lineHeightStr || '0', 10) || 20;
     const maxHeight = lineHeight * this.maxRows;
     
     if (textarea.scrollHeight <= maxHeight) {

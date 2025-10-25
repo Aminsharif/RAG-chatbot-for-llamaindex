@@ -44,7 +44,7 @@
       [textColor]="'white'"
       [borderColor]="'rgb(58, 58, 61)'"
       (valueChange)="input = $event"
-      (keyDown)="($event.key === 'Enter' && !$event.shiftKey) ? (sendMessage(), $event.preventDefault()) : ($event.key === 'Enter' && $event.shiftKey ? (input = input + '\n', $event.preventDefault()) : null)"
+      (keyDown)="onInputKeyDown($event)"
     ></app-auto-resize-textarea>
     <button
       class="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white rounded-full px-4 py-2"

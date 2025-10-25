@@ -1,0 +1,150 @@
+<div class="demo-container">
+  <header class="demo-header">
+    <h1>Markdown Rendering Demo</h1>
+    <p>Showcase of the Angular markdown rendering system with syntax highlighting and theme support.</p>
+    
+    <div class="demo-controls">
+      <button 
+        class="control-button"
+        (click)="toggleTheme()"
+        [title]="'Current theme: ' + currentTheme"
+      >
+        <svg *ngIf="currentTheme === 'light'" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
+        </svg>
+        <svg *ngIf="currentTheme === 'dark'" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd"/>
+        </svg>
+        <svg *ngIf="currentTheme === 'auto'" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4.5 17.25a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75zM5.25 19.5a.75.75 0 000 1.5h13.5a.75.75 0 000-1.5H5.25z"/>
+          <path fill-rule="evenodd" d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v8.25c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 13.875V5.625zM21 9.375A.375.375 0 0020.625 9H3.375a.375.375 0 00-.375.375v4.5c0 .207.168.375.375.375h17.25a.375.375 0 00.375-.375v-4.5z" clip-rule="evenodd"/>
+        </svg>
+        {{ currentTheme | titlecase }} Theme
+      </button>
+      
+      <button 
+        class="control-button"
+        (click)="toggleStreaming()"
+        [class.active]="isStreaming"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M5.055 7.06c-1.25-.714-2.805.189-2.805 1.628v8.123c0 1.44 1.555 2.342 2.805 1.628L12 14.471v2.34c0 1.44 1.555 2.342 2.805 1.628l7.108-4.061c1.26-.72 1.26-2.536 0-3.256L14.805 7.06C13.555 6.346 12 7.25 12 8.688v2.34L5.055 7.06z"/>
+        </svg>
+        {{ isStreaming ? 'Stop' : 'Start' }} Streaming
+      </button>
+    </div>
+  </header>
+
+  <main class="demo-content">
+    <section class="demo-section">
+      <h2>Full Feature Demo</h2>
+      <p>This example showcases all supported markdown features including syntax highlighting, tables, lists, and more.</p>
+      
+      <app-llm-output
+        [markdownContent]="sampleMarkdown"
+        [theme]="currentTheme"
+        [showCopyButton]="true"
+        [showWordCount]="true"
+        maxHeight="600px"
+      ></app-llm-output>
+    </section>
+
+    <section class="demo-section">
+      <h2>Streaming Demo</h2>
+      <p>This example demonstrates how the component handles streaming content with a typing indicator.</p>
+      
+      <app-llm-output
+        [markdownContent]="streamingDemo"
+        [isStreaming]="isStreaming"
+        [theme]="currentTheme"
+        [showCopyButton]="true"
+        [showWordCount]="false"
+        maxHeight="300px"
+      ></app-llm-output>
+    </section>
+
+    <section class="demo-section">
+      <h2>Usage Examples</h2>
+      
+      <div class="usage-examples">
+        <div class="example-card">
+          <h3>Basic Usage</h3>
+          <pre><code class="language-html">&lt;app-llm-output
+  [markdownContent]="llmResponse"
+&gt;&lt;/app-llm-output&gt;</code></pre>
+        </div>
+
+        <div class="example-card">
+          <h3>With Pipe in Template</h3>
+          <pre><code class="language-html">&lt;div 
+  class="markdown-content"
+  [innerHTML]="llmResponse | markdown"
+&gt;&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="example-card">
+          <h3>Full Configuration</h3>
+          <pre><code class="language-html">&lt;app-llm-output
+  [markdownContent]="response"
+  [isStreaming]="isLoading"
+  [theme]="'dark'"
+  [showCopyButton]="true"
+  [showWordCount]="true"
+  maxHeight="400px"
+&gt;&lt;/app-llm-output&gt;</code></pre>
+        </div>
+
+        <div class="example-card">
+          <h3>Service Usage</h3>
+          <pre><code class="language-typescript">constructor(private md: MarkdownService) {{ '{' }}{{ '}' }}
+
+processResponse(markdown: string) {{ '{' }}
+  const html = this.md.parseMarkdownSync(markdown);
+  // Use the sanitized HTML
+{{ '}' }}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Syntax Highlighting</h3>
+          <p>Powered by highlight.js with support for 190+ languages</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🌙</div>
+          <h3>Theme Support</h3>
+          <p>Light, dark, and auto themes with CSS custom properties</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>XSS Protection</h3>
+          <p>Content sanitized with DOMPurify for security</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Fast Rendering</h3>
+          <p>Optimized with marked.js for performance</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Responsive</h3>
+          <p>Mobile-friendly design with proper scaling</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Streaming Support</h3>
+          <p>Real-time content updates with typing indicators</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

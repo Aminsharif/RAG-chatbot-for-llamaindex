@@ -4,6 +4,7 @@ import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-source-bubble',
+  standalone: true,
   imports: [],
   templateUrl: './source-bubble.html',
   styleUrl: './source-bubble.css'
